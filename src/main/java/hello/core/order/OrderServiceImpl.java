@@ -6,16 +6,19 @@ import hello.core.discount.RateDiscountPolicy;
 import hello.core.member.Member;
 import hello.core.member.MemberRepository;
 import hello.core.member.MemoryMemberRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 @Component
+//@RequiredArgsConstructor//final 붙은 필드를 파라미터로 받는 생성자를 만들어줌
 public class OrderServiceImpl implements OrderService{
 
     //@Autowired
-    MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
     //@Autowired
-    DiscountPolicy discountPolicy;
+    private final DiscountPolicy discountPolicy;
 
 //    @Autowired(required = false)//Autowired는 주입할 대상이 없으면 오류 발생, required=false 옵션 설정하면 없어도 동작
 //    public void setMemberRepository(MemberRepository memberRepository){
@@ -29,8 +32,8 @@ public class OrderServiceImpl implements OrderService{
 //        this.discountPolicy = discountPolicy;
 //    }
 
-    @Autowired
-    public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
+    @Autowired//생성자가 하나일때는 @Autowired 생략 가능
+    public OrderServiceImpl(MemberRepository memberRepository, @Qualifier("mainDiscountPolicy") DiscountPolicy discountPolicy) {
         System.out.println("1. OrderServiceImpl.OrderServiceImpl");
         this.memberRepository = memberRepository;
         this.discountPolicy = discountPolicy;
